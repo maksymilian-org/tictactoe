@@ -1,0 +1,21 @@
+.square {
+  text-align: center;
+  font-size: 80px;
+  line-height: 70px;
+  font-weight: 300;
+}
+
+.status {
+  display: inline-block;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+
+  &.active {
+    background: chartreuse;
+  }
+
+  &.inactive {
+    background: tomato;
+  }
+}
