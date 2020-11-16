@@ -15,7 +15,7 @@ const Board: React.FC = () => {
     players: [undefined, undefined]
   });
 
-  const socket = useMemo(() => io.connect(':8080'), []);
+  const socket = useMemo(() => io.connect(), []);
 
   const [player, setPlayer] = useState(undefined);
 
