@@ -15,7 +15,7 @@ const Board: React.FC = () => {
     players: [undefined, undefined]
   });
 
-  const socket = useMemo(() => io.connect('http://localhost:8080'), []);
+  const socket = useMemo(() => io.connect(':8080'), []);
 
   const [player, setPlayer] = useState(undefined);
 
@@ -32,6 +32,14 @@ const Board: React.FC = () => {
     socket.emit('clear', hash);
   };
 
+  const isFull = (values) => {
+    return values.every((v) => v);
+  };
+
+  const copyToClipboard = () => {
+    navigator.clipboard.writeText(location.href);
+  };
+
   const handleClick = (id) => {
     const yourSign = state.players[0] === player ? 'o' : state.players[1] === player ? 'x' : '';
     !state.winner && yourSign === state.turn && socket.emit('move', { id, hash });
@@ -41,6 +49,21 @@ const Board: React.FC = () => {
     <>
       <div className="row align-items-center justify-content-center m-auto h-100" style={{ maxWidth: 300 }}>
         <div className="col">
+          <div className="row">
+            <div className="input-group mb-4">
+              <input type="text" className="form-control" value={location.href} />
+              <div className="input-group-append">
+                <button
+                  className="btn btn-outline-secondary"
+                  type="button"
+                  id="button-addon2"
+                  onClick={copyToClipboard}
+                >
+                  copy
+                </button>
+              </div>
+            </div>
+          </div>
           <div className="row text-center">
             <div
               className={`col-4 rounded px-1 border${state.turn === 'o' ? ' border-primary' : ''}${
@@ -80,16 +103,16 @@ const Board: React.FC = () => {
                 isWinnerSquare={state.winnerSquares.includes(i)}
               />
             ))}
-            <div className="col-12 mt-4">
-              <button
-                type="button"
-                className="btn btn-primary btn-lg btn-block"
-                disabled={state.winner ? undefined : true}
-                onClick={setNewRound}
-              >
-                New round
-              </button>
-            </div>
+          </div>
+          <div className="row mt-3">
+            <button
+              type="button"
+              className="btn btn-primary btn-lg btn-block"
+              disabled={state.winner || isFull(state.values) ? undefined : true}
+              onClick={setNewRound}
+            >
+              New round
+            </button>
           </div>
         </div>
       </div>

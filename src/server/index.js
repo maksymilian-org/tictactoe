@@ -7,6 +7,8 @@ const server = http.createServer(app);
 const io = socketio(server);
 app.use(express.static('dist'));
 
+app.use('/:id', express.static('dist'));
+
 const winners = [
   [0, 1, 2],
   [3, 4, 5],
@@ -73,8 +75,11 @@ const clear = (hash) => {
 };
 
 io.on('connection', (client) => {
-  let hash = client.handshake.headers.referer.split('/');
-  hash = hash[hash.length - 1];
+  const { host, referer } = client.handshake.headers;
+  const hash = referer
+    .replace(host, '')
+    .replace(/https?:/, '')
+    .replace(/\//g, '');
   connect(client.id, hash);
 
   client.on('move', ({ id, hash }) => {
