@@ -20,7 +20,7 @@ const App: React.FC = () => {
         <Router basename="/">
           <Suspense fallback={<div />}>
             <Switch>
-              <Route exac path="/:hash?/">
+              <Route path="/:hash?/">
                 <Home />
               </Route>
               <Route path="*">
